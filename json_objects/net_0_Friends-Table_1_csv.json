@@ -1,0 +1,40 @@
+{
+    "CSV": {
+        "Source": {
+            "Mean": 32476.662959794696,
+            "Median": 32477.0,
+            "Mode": [
+                32409
+            ],
+            "Standard Deviation": 51.52028798217613,
+            "Variance": 2654.340073766362,
+            "Skewness": 0.02616994350710005,
+            "Kurtosis": -1.332828426793575,
+            "Min": "32392",
+            "Max": "32565",
+            "25th Percentile": 32431.0,
+            "50th Percentile": 32477.0,
+            "75th Percentile": 32526.0,
+            "Count": "1169",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 32473.074422583406,
+            "Median": 32473.0,
+            "Mode": [
+                32405
+            ],
+            "Standard Deviation": 51.612910913601645,
+            "Variance": 2663.8925729753796,
+            "Skewness": 0.0912212477106782,
+            "Kurtosis": -1.2905570733632794,
+            "Min": "32391",
+            "Max": "32565",
+            "25th Percentile": 32425.0,
+            "50th Percentile": 32473.0,
+            "75th Percentile": 32518.0,
+            "Count": "1169",
+            "Missing Values": "0"
+        }
+    }
+}

@@ -3,7 +3,26 @@
 {% block title %}Descriptive Statistics{% endblock %}
 
 {% block content %}
-<h1>Select a Dataset for Analysis</h1>
+<head>
+    <style>
+        .table-bordered thead .custom-th {
+            padding-left: 2px;
+            padding-right: 2px;
+            text-align: center;
+            background: #013B7A;
+            color: white;
+        }
+        .json-data {
+            white-space: pre-wrap; /* This will wrap the text and display line breaks */
+        }
+        .graph-container {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+    }
+    </style>
+</head>
+
+<h1>Descriptive Statistics</h1>
 <ul class="list-group">
     {% for file in files %}
     <li class="list-group-item">
@@ -11,4 +30,169 @@
     </li>
     {% endfor %}
 </ul>
+
+{% if stats %}
+<h2>Statistics Summary</h2>
+{% for filename, file_stats in stats.items() %}
+<h3>{{ filename }}</h3>
+{% for sheet_name, sheet_stats in file_stats.items() %}
+    {% if sheet_stats|length > 1 %}
+        {% if not ('ID' in sheet_stats and sheet_stats|length == 1) %}
+            <h4>{{ sheet_name }}</h4>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr class="bg-royalblue text-white">
+                        <th class="col-1 custom-th" >Column</th>
+                        <th class="col-1 custom-th" >Mean</th>
+                        <th class="col-1 custom-th" >Median</th>
+                        <th class="col-1 custom-th" >Mode</th>
+                        <th class="col-1 custom-th" >Standard Deviation</th>
+                        <th class="col-1 custom-th" >Variance</th>
+                        <th class="col-1 custom-th" >Skewness</th>
+                        <th class="col-1 custom-th" >Kurtosis</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for column, stat in sheet_stats.items() %}
+                        {% if 'id' not in column|lower %}
+                        <tr>
+                            <td class="col-1">{{ column }}</td>
+                            <td class="col-1">{{ stat['Mean']|round(2) }}</td>
+                            <td class="col-1">{{ stat['Median']|round(2) }}</td>
+                            <td class="col-1">{{ stat['Mode']|join(", ") }}</td>
+                            <td class="col-1">{{ stat['Standard Deviation']|round(2) }}</td>
+                            <td class="col-1">{{ stat['Variance']|round(2) }}</td>
+                            <td class="col-1">{{ stat['Skewness']|round(2) }}</td>
+                            <td class="col-1">{{ stat['Kurtosis']|round(2) }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+           
+            
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+<h2>Statistics Visualization {{ sheet_name }}</h2>
+<div id="visualization-{{ sheet_name|replace(' ', '_') }}"></div>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<script>
+
+    // Fetch the list of filenames
+    d3.json("/list_files").then(function(files) {
+        // Iterate over each filename and fetch its data
+        files.forEach(function(filename) {
+            d3.json(`/get_json_data/${filename}`).then(function(data) {
+                // Iterate over each sheet in the JSON data
+                Object.keys(data).forEach(function(sheetName) {
+                    var sheetData = data[sheetName];
+    
+                    Object.keys(sheetData).forEach(function(metric) {
+                        var dataPoints = sheetData[metric];
+    
+                        // Extract values for the current metric
+                        var flattenedData = Object.values(dataPoints).map(d => parseFloat(d)).filter(d => !isNaN(d));
+    
+                        // Determine the maximum value to set the y-axis limit
+                        var maxY = Math.max(...flattenedData);
+                        var yLimit = maxY > 0.1 ? 0.15 : 0.5;
+    
+                        // Define scales
+                        var xScale = d3.scaleLinear()
+                                       .domain([-5, 5])
+                                       .range([50, 750]);
+    
+                        var yScale = d3.scaleLinear()
+                                       .domain([0, yLimit])
+                                       .range([400, 50]);
+    
+                        // Set up SVG for the current column
+                        var svg = d3.select("#visualization-{{ sheet_name|replace(' ', '_') }}")
+                                    .append("div")
+                                    .attr("class", "graph-container")
+                                    .append("svg")
+                                    .attr("width", 800)
+                                    .attr("height", 450);
+    
+                        // Add title
+                        svg.append("text")
+                            .attr("x", 400)
+                            .attr("y", 20)
+                            .attr("text-anchor", "middle")
+                            .attr("font-size", "20px")
+                            .text(sheetName + ' - ' + metric);
+    
+                        // Define kernel density estimator for normal distribution
+                        var kde = kernelDensityEstimator(kernelGaussian(7), xScale.ticks(40));
+                        var density = kde(flattenedData);
+    
+                        // Draw KDE line
+                        var line = d3.line()
+                                     .x(d => xScale(d[0]))
+                                     .y(d => yScale(d[1]));
+    
+                        svg.append("path")
+                           .datum(density)
+                           .attr("fill", "none")
+                           .attr("stroke", "blue")
+                           .attr("stroke-width", 2)
+                           .attr("d", line);
+    
+                        // Draw axes
+                        svg.append("g")
+                           .attr("transform", "translate(0," + 400 + ")")
+                           .call(d3.axisBottom(xScale).ticks(10));
+    
+                        svg.append("g")
+                           .attr("transform", "translate(50,0)")
+                           .call(d3.axisLeft(yScale).ticks(10));
+    
+                        // Add axis labels
+                        svg.append("text")
+                           .attr("transform", "translate(" + (800 / 2) + " ," + (400 + 40) + ")")
+                           .style("text-anchor", "middle")
+                           .text("Values");
+    
+                        svg.append("text")
+                           .attr("transform", "rotate(-90)")
+                           .attr("y", 0 - 50)
+                           .attr("x", 0 - (400 / 2))
+                           .attr("dy", "1em")
+                           .style("text-anchor", "middle")
+                           .text("Density");
+                    });
+    
+                });
+    
+            }).catch(function(error) {
+                console.error(`Error fetching data for ${filename}:`, error);
+            });
+        });
+    }).catch(function(error) {
+        console.error('Error fetching the list of files:', error);
+    });
+    
+    // Kernel density estimation
+    function kernelDensityEstimator(kernel, x) {
+        return function(sample) {
+            return x.map(function(x) {
+                return [x, d3.mean(sample, function(v) { return kernel(x - v); })];
+            });
+        };
+    }
+    
+    function kernelGaussian(k) {
+        return function(v) {
+            return Math.exp(-0.5 * v * v) / Math.sqrt(2 * Math.PI);
+        };
+    }
+    
+    </script>
+    
 {% endblock %}
