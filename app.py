@@ -73,8 +73,8 @@ def home():
     breadcrumbs = [("Home", "/")]
     return render_template('index.html', breadcrumbs=breadcrumbs)
 
-# Function to drop 'Export Summary' sheet from Excel files
-def drop_specific_sheet(file_path):
+# Function to drop sheets containing NaN values from Excel files
+def drop_nan_sheets(file_path):
     # Check if the file is an Excel file
     if not file_path.endswith(('.xlsx', '.xls')):
         return None, 'Unsupported file format'
@@ -82,26 +82,30 @@ def drop_specific_sheet(file_path):
     # Load the Excel file
     xls = pd.ExcelFile(file_path)
 
-    # Check if the sheet 'Export Summary' exists
-    if 'Export Summary' in xls.sheet_names:
-        # Read all sheets except 'Export Summary'
-        sheets = {sheet_name: xls.parse(sheet_name) for sheet_name in xls.sheet_names if sheet_name != 'Export Summary'}
+    # Read all sheets and drop sheets containing NaN values
+    sheets = {}
+    for sheet_name in xls.sheet_names:
+        df = xls.parse(sheet_name)
+        if not df.isnull().values.any():
+            sheets[sheet_name] = df
 
-        # Save the modified Excel file
-        modified_file_path = os.path.join(app.config['UPLOAD_FOLDER'], f"modified_{os.path.basename(file_path)}")
-        with pd.ExcelWriter(modified_file_path) as writer:
+    # Check if any sheets were dropped
+    if len(sheets) < len(xls.sheet_names):
+        # Overwrite the original Excel file
+        with pd.ExcelWriter(file_path) as writer:
             for sheet_name, df in sheets.items():
                 df.to_excel(writer, sheet_name=sheet_name, index=False)
 
-        return modified_file_path, 'Sheet "Export Summary" dropped successfully'
-
+        return file_path, 'Sheets containing NaN values dropped successfully'
     else:
-        return None, 'Sheet "Export Summary" not found'
+        return None, 'No sheets containing NaN values found'
 
 # Route for uploading data files
 @app.route('/data-upload', methods=['GET', 'POST'])
 def data_upload():
     breadcrumbs = [("Home", "/"), ("Data Upload", "/data-upload")]
+    files_info = []
+
     if request.method == 'POST':
         file = request.files['dataFile']
         if file and allowed_file(file.filename):
@@ -109,21 +113,23 @@ def data_upload():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
             
-            # Drop 'Export Summary' sheet
-            modified_file_path, message = drop_specific_sheet(file_path)
+            # Drop sheets containing NaN values
+            modified_file_path, message = drop_nan_sheets(file_path)
             
             if modified_file_path:
-                flash(f'😄 File {filename} uploaded and "Export Summary" sheet dropped successfully!', 'success')
+                flash(f'😄 File {filename} uploaded and sheets containing NaN values dropped successfully!', 'success')
             else:
-                flash(f'😞 File {filename} uploaded but "Export Summary" sheet was not found.', 'warning')
-                files = os.listdir(app.config['UPLOAD_FOLDER'])
-                files_info = [{
+                flash(f'😞 File {filename} uploaded but no sheets containing NaN values were found.', 'warning')
+            
+            # Update files info
+            files = os.listdir(app.config['UPLOAD_FOLDER'])
+            files_info = [{
                  'name': file,
                  'size': f"{os.stat(os.path.join(app.config['UPLOAD_FOLDER'], file)).st_size / 1024:.2f} KB",
                  'upload_time': datetime.fromtimestamp(os.stat(os.path.join(app.config['UPLOAD_FOLDER'], file)).st_mtime).strftime('%Y-%m-%d %H:%M:%S')
             } for file in files]
-    return render_template('data_upload.html', breadcrumbs=breadcrumbs, files=files_info)
 
+    return render_template('data_upload.html', breadcrumbs=breadcrumbs, files=files_info)
 # Route for displaying datasets
 @app.route('/datasets')
 def datasets():

@@ -96,13 +96,9 @@
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
 <script>
-
     // Fetch the list of filenames
-
     d3.json("/list_files").then(function(files) {
-
         // Iterate over each filename and fetch its data
-
         files.forEach(function(filename) {
             d3.json(`/get_json_data/${filename}`).then(function(data) {
                 // Iterate over each sheet in the JSON data
@@ -113,35 +109,27 @@
                         var dataPoints = sheetData[metric];
     
                         // Extract values for the current metric
-
                         var flattenedData = Object.values(dataPoints).map(d => parseFloat(d)).filter(d => !isNaN(d));
     
-                        // Determine the minimum and maximum values for the x-axis
-
-                        var minX = d3.min(flattenedData);
-                        var maxX = d3.max(flattenedData);
-    
-                        // Determine the minimum and maximum values for the y-axis
-
+                        // Determine the maximum value to set the y-axis limit
                         var maxY = Math.max(...flattenedData);
                         var yLimit = maxY > 0.1 ? 0.15 : 0.5;
     
                         // Define scales
-
                         var margin = {top: 30, right: 30, bottom: 50, left: 50},
-                            width = 800 - margin.left - margin.right,
-                            height = 450 - margin.top - margin.bottom;
+                            width = 500 - margin.left - margin.right,
+                            height = 250 - margin.top - margin.bottom;
+                          
     
                         var xScale = d3.scaleLinear()
-                                       .domain([minX, maxX])
+                                       .domain([-10, 10])
                                        .range([0, width]);
     
                         var yScale = d3.scaleLinear()
-                                       .domain([0, yLimit])
+                                       .domain([0, 0.30])
                                        .range([height, 0]);
     
                         // Set up SVG for the current column
-
                         var svg = d3.select("#visualization-{{ sheet_name|replace(' ', '_') }}")
                                     .append("div")
                                     .attr("class", "graph-container")
@@ -160,12 +148,10 @@
                             .text(sheetName + ' - ' + metric);
     
                         // Define kernel density estimator for normal distribution
-
                         var kde = kernelDensityEstimator(kernelGaussian(7), xScale.ticks(40));
                         var density = kde(flattenedData);
     
                         // Draw KDE line
-
                         var line = d3.line()
                                      .x(d => xScale(d[0]))
                                      .y(d => yScale(d[1]));
@@ -178,7 +164,6 @@
                            .attr("d", line);
     
                         // Draw axes
-
                         svg.append("g")
                            .attr("transform", "translate(0," + height + ")")
                            .call(d3.axisBottom(xScale).ticks(10));
@@ -187,7 +172,6 @@
                            .call(d3.axisLeft(yScale).ticks(10));
     
                         // Add axis labels
-
                         svg.append("text")
                            .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top) + ")")
                            .style("text-anchor", "middle")
@@ -213,7 +197,6 @@
     });
     
     // Kernel density estimation
-
     function kernelDensityEstimator(kernel, x) {
         return function(sample) {
             return x.map(function(x) {
@@ -228,5 +211,4 @@
         };
     }
 </script>
-
 {% endblock %}
