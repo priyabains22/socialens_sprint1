@@ -1,0 +1,271 @@
+{
+    "net_0_Friends": {
+        "Source": {
+            "Mean": 37935.886237072395,
+            "Median": 37939.0,
+            "Mode": [
+                37939
+            ],
+            "Standard Deviation": 49.42022726555174,
+            "Variance": 2442.3588629787837,
+            "Skewness": -0.07592016015088546,
+            "Kurtosis": -1.1697075112612085,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37891.0,
+            "50th Percentile": 37939.0,
+            "75th Percentile": 37977.0,
+            "Count": "1257",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 37933.18536197295,
+            "Median": 37932.0,
+            "Mode": [
+                37879
+            ],
+            "Standard Deviation": 50.683448493198064,
+            "Variance": 2568.8119511626614,
+            "Skewness": 0.05246177437641963,
+            "Kurtosis": -1.260988743038425,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37886.0,
+            "50th Percentile": 37932.0,
+            "75th Percentile": 37979.0,
+            "Count": "1257",
+            "Missing Values": "0"
+        }
+    },
+    "net_1_Influential": {
+        "Source": {
+            "Mean": 37933.6525974026,
+            "Median": 37931.0,
+            "Mode": [
+                37867
+            ],
+            "Standard Deviation": 50.47338860628346,
+            "Variance": 2547.5629574009045,
+            "Skewness": 0.018719717598622145,
+            "Kurtosis": -1.281503542936584,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37886.0,
+            "50th Percentile": 37931.0,
+            "75th Percentile": 37980.0,
+            "Count": "308",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 37919.53571428572,
+            "Median": 37906.0,
+            "Mode": [
+                37854
+            ],
+            "Standard Deviation": 53.26476816951923,
+            "Variance": 2837.135528152629,
+            "Skewness": 0.3238169662573545,
+            "Kurtosis": -1.1534316096899835,
+            "Min": "37849",
+            "Max": "38019",
+            "25th Percentile": 37865.75,
+            "50th Percentile": 37906.0,
+            "75th Percentile": 37964.0,
+            "Count": "308",
+            "Missing Values": "0"
+        }
+    },
+    "net_2_Feedback": {
+        "Source": {
+            "Mean": 37939.7625,
+            "Median": 37947.5,
+            "Mode": [
+                37971
+            ],
+            "Standard Deviation": 49.34675626174921,
+            "Variance": 2435.102353556485,
+            "Skewness": -0.21097056658042526,
+            "Kurtosis": -1.1970508978130092,
+            "Min": "37850",
+            "Max": "38022",
+            "25th Percentile": 37895.0,
+            "50th Percentile": 37947.5,
+            "75th Percentile": 37982.0,
+            "Count": "240",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 37934.49166666667,
+            "Median": 37927.5,
+            "Mode": [
+                37906
+            ],
+            "Standard Deviation": 50.86975671101854,
+            "Variance": 2587.7321478382155,
+            "Skewness": 0.12496765689540446,
+            "Kurtosis": -1.3029751563507777,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37890.0,
+            "50th Percentile": 37927.5,
+            "75th Percentile": 37985.0,
+            "Count": "240",
+            "Missing Values": "0"
+        }
+    },
+    "net_3_MoreTime": {
+        "Source": {
+            "Mean": 37936.066666666666,
+            "Median": 37941.0,
+            "Mode": [
+                37968
+            ],
+            "Standard Deviation": 50.98118418854673,
+            "Variance": 2599.0811412665266,
+            "Skewness": -0.026602677047129732,
+            "Kurtosis": -1.3293937196278192,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37885.0,
+            "50th Percentile": 37941.0,
+            "75th Percentile": 37978.0,
+            "Count": "480",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 37933.80416666667,
+            "Median": 37930.0,
+            "Mode": [
+                37879,
+                37975
+            ],
+            "Standard Deviation": 51.019206986769234,
+            "Variance": 2602.959481558803,
+            "Skewness": 0.10103890844241273,
+            "Kurtosis": -1.2669995859915646,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37886.75,
+            "50th Percentile": 37930.0,
+            "75th Percentile": 37977.0,
+            "Count": "480",
+            "Missing Values": "0"
+        }
+    },
+    "net_4_Advice": {
+        "Source": {
+            "Mean": 37935.53611111111,
+            "Median": 37936.0,
+            "Mode": [
+                37890
+            ],
+            "Standard Deviation": 51.071077526960195,
+            "Variance": 2608.2549597647785,
+            "Skewness": -0.002844410680282553,
+            "Kurtosis": -1.2812940919863267,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37890.0,
+            "50th Percentile": 37936.0,
+            "75th Percentile": 37981.0,
+            "Count": "360",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 37942.64166666667,
+            "Median": 37940.5,
+            "Mode": [
+                37906
+            ],
+            "Standard Deviation": 48.75230942319254,
+            "Variance": 2376.787674094708,
+            "Skewness": -0.12458116827404102,
+            "Kurtosis": -1.203122855350522,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37904.0,
+            "50th Percentile": 37940.5,
+            "75th Percentile": 37989.0,
+            "Count": "360",
+            "Missing Values": "0"
+        }
+    },
+    "net_5_Disrespect": {
+        "Source": {
+            "Mean": 37938.520202020205,
+            "Median": 37927.0,
+            "Mode": [
+                37907,
+                37917
+            ],
+            "Standard Deviation": 50.71115673318707,
+            "Variance": 2571.621417217864,
+            "Skewness": 0.15915072412068182,
+            "Kurtosis": -1.1600005004677267,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37903.25,
+            "50th Percentile": 37927.0,
+            "75th Percentile": 37985.5,
+            "Count": "198",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 37929.38383838384,
+            "Median": 37922.0,
+            "Mode": [
+                37864,
+                37957
+            ],
+            "Standard Deviation": 48.48029733677458,
+            "Variance": 2350.339229862073,
+            "Skewness": 0.1569667245119351,
+            "Kurtosis": -0.9185370471847216,
+            "Min": "37849",
+            "Max": "38021",
+            "25th Percentile": 37889.0,
+            "50th Percentile": 37922.0,
+            "75th Percentile": 37960.0,
+            "Count": "198",
+            "Missing Values": "0"
+        }
+    },
+    "net_affiliation_0_SchoolActivit": {
+        "Source": {
+            "Mean": 37937.81686746988,
+            "Median": 37939.0,
+            "Mode": [
+                37983
+            ],
+            "Standard Deviation": 50.60775756175384,
+            "Variance": 2561.1451254292533,
+            "Skewness": -0.03523060064577167,
+            "Kurtosis": -1.232977057424911,
+            "Min": "37849",
+            "Max": "38022",
+            "25th Percentile": 37891.0,
+            "50th Percentile": 37939.0,
+            "75th Percentile": 37981.5,
+            "Count": "415",
+            "Missing Values": "0"
+        },
+        "Target": {
+            "Mean": 9603.546987951808,
+            "Median": 9606.0,
+            "Mode": [
+                9589
+            ],
+            "Standard Deviation": 11.666131844360386,
+            "Variance": 136.09863220999947,
+            "Skewness": -0.23676337093650007,
+            "Kurtosis": -1.2890201209308436,
+            "Min": "9584",
+            "Max": "9623",
+            "25th Percentile": 9590.0,
+            "50th Percentile": 9606.0,
+            "75th Percentile": 9611.0,
+            "Count": "415",
+            "Missing Values": "0"
+        }
+    }
+}

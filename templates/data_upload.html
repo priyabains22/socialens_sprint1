@@ -3,23 +3,40 @@
 {% block title %}Data Upload{% endblock %}
 
 {% block content %}
-    <h1>Data Upload</h1>
-    <p>Feed me some data please. 🤗</p>
-
-    <!-- Display flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
+<h1>Data Upload</h1>
+<div class="upload-form">
     <form method="post" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="dataFile" class="form-label">Choose a file to upload</label>
+            <label for="dataFile" class="form-label">Choose a file to upload (.csv, .xlsx, .xls only)</label>
             <input type="file" class="form-control" id="dataFile" name="dataFile" required>
+            <button type="submit" class="btn btn-primary mt-3">Upload</button>
         </div>
-        <button type="submit" class="btn btn-primary">Upload</button>
     </form>
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<h2>Uploaded Files</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Uploaded</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+        <tr>
+            <td>{{ file.name }}</td>
+            <td>{{ file.size }}</td>
+            <td>{{ file.upload_time }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
