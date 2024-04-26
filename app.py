@@ -5,7 +5,6 @@ import os
 import json
 from datetime import datetime
 import pandas as pd
-# referencing an external py file
 from descriptive_statistics import analyze_file
 
 # Initialize Flask application
@@ -130,6 +129,10 @@ def data_upload():
             } for file in files]
 
     return render_template('data_upload.html', breadcrumbs=breadcrumbs, files=files_info)
+
+
+
+
 # Route for displaying datasets
 @app.route('/datasets')
 def datasets():
@@ -245,11 +248,24 @@ def analyze(filename):
     results = analyze_file(file_path)
     return render_template('view_statistics.html', filename=filename, results= results,breadcrumbs=breadcrumbs)
 
-# Route for network visualizer
+
+# Route for descriptive statistics
 @app.route('/network-visualiser')
 def network_visualiser():
-    breadcrumbs = [("Home", "/"), ("Network Visualiser", "/network-visualiser")]
-    return render_template('network_visualiser.html', breadcrumbs=breadcrumbs)
+    breadcrumbs = [("Home", "/"), ("Network Visualiser", "/Network Visualiser")]
+    files = [f for f in os.listdir(app.config['UPLOAD_FOLDER']) if allowed_file(f)]
+    stats = {}
+    json_files = {}
+    
+    for file in files:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file)
+        stats[file], json_files[file] = create_json_graph(file_path)
+
+        # Call create_json_graph to print JSON data to console
+        print(f"JSON data for {file}:")
+        print(stats[file])
+    
+    return render_template('network_visualiser.html', files=files, stats=stats, json_files=json_files, breadcrumbs=breadcrumbs)
 
 # Route for serving static JSON files
 @app.route('/json_objects/<path:filename>')
