@@ -84,7 +84,7 @@ def summarize_files(file_path):
                 )
             summaries[sheet_name] = " ".join(summary_lines)
         #OpenAI API Key
-        openai.api_key = ''
+        openai.api_key = 'sk-proj-l28vi099mhVpldhAdv1WT3BlbkFJ9A23j9wCGtblQ6SORaSR'
         #Sending summaries to ChatGPT 3.5 Turbo for interpretation
         for sheet_name, summary in summaries.items():
             response = openai.chat.completions.create(
