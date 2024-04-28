@@ -5,7 +5,7 @@ import os
 import json
 from datetime import datetime
 import pandas as pd
-from descriptive_statistics import analyze_file  
+from descriptive_statistics import analyze_file, summarize_files 
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Required to use flash messages
@@ -182,17 +182,19 @@ def descriptive_statistics():
     breadcrumbs = [("Home", "/"), ("Descriptive Statistics", "/descriptive-statistics")]
     files = [f for f in os.listdir(app.config['UPLOAD_FOLDER']) if allowed_file(f)]
     stats = {}
+    summary_prompts = {}
     json_files = {}
     
     for file in files:
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file)
         stats[file], json_files[file] = create_json_graph(file_path)
-
+        summaries = summarize_files(file_path)
+        summary_prompts[file] = summaries
         # Call create_json_graph to print JSON data to console
         print(f"JSON data for {file}:")
         print(stats[file])
     
-    return render_template('descriptive_statistics.html', files=files, stats=stats, json_files=json_files, breadcrumbs=breadcrumbs)
+    return render_template('descriptive_statistics.html', files=files, stats=stats, json_files=json_files, breadcrumbs=breadcrumbs, summary_prompts=summary_prompts)
 
 @app.route('/descriptive-statistics-viewer')
 def descriptive_statistics_viewer():
