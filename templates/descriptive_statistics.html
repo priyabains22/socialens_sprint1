@@ -82,10 +82,19 @@
                         {% endif %}
                     {% endfor %}
                 </tbody>
-            </table>           
+            </table>
         {% endif %}
     {% endif %}
 {% endfor %}
+{% if summary_prompts %}
+            <h2>Summary of Statistical Analysis</h2>
+{% for filename, file_summaries in summary_prompts.items() %}
+    {% for sheet_name, summary in file_summaries.items() %}
+        <h3>Summary for {{ sheet_name }}</h3>
+        <p>{{ summary }}</p>
+    {% endfor %}
+{% endfor %}
+{% endif %}           
 {% endfor %}
 {% endif %}
 
